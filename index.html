@@ -86,7 +86,15 @@
             bindto: '#chart1',
             data: {
                 url: 'participation.csv',
-                type: 'bar'
+                // type: 'bar',
+                types: {
+                    owner: 'area-spline',
+                    others: 'area-spline'
+                    // 'line', 'spline', 'step', 'area', 'area-step' are also available to stack
+                },
+                groups: [
+                    [['owner', 'others']]
+                ]
             },
             axis: {
                 x: {
