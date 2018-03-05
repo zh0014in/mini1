@@ -1,0 +1,37 @@
+<html>
+
+<head>
+    <!-- Load c3.css -->
+    <link href="c3.min.js" rel="stylesheet">
+
+    <!-- Load d3.js and c3.js -->
+    <script src="d3.v3.min.js" charset="utf-8"></script>
+    <script src="c3.min.js"></script>
+</head>
+
+<body>
+    <div id="chart"></div>
+    <script>
+        var chart = c3.generate({
+            bindto: '#chart',
+            data: {
+                url: 'participation.csv',
+                type: 'bar'
+            },
+            axis: {
+                x: {
+                    // type: 'timeseries',
+                    tick: {
+                        format: function (x) { 
+                            var today = new Date();
+                            today.setDate(today.getDate() - x - 1);
+                            return today.toLocaleDateString();
+                         }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
