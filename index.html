@@ -8,6 +8,7 @@
     <!-- Load d3.js and c3.js -->
     <script src="d3.v3.min.js" charset="utf-8"></script>
     <script src="c3.min.js"></script>
+    <script src="bubble.js"></script>
 </head>
 
 <body>
@@ -18,11 +19,15 @@
     <h1>Total bytes count of languages (Torvalds)</h1>
     <div id="chart3"></div>
     <div id="chart4"></div>
+    <svg id="chart5"></svg>
     <script>
-        var languagesBytesCandOthers = { "C": 0, "Others": 0 };
+        var languagesBytesCandOthers = {
+            "C": 0,
+            "Others": 0
+        };
         var languagesBytesOthers = {};
         var languagesBytesAll = {};
-        fetchData();
+        //fetchData();
 
         function fetchData() {
             $.get("https://api.github.com/users/torvalds/repos", function (repos) {
@@ -62,6 +67,7 @@
                 getLanguages(repos, index);
             });
         }
+
         function mergeToLanguagesBytes(input) {
             for (var propertyName in input) {
                 languagesBytesAll[propertyName] = languagesBytesAll[propertyName] || 0;
@@ -93,7 +99,9 @@
                     // 'line', 'spline', 'step', 'area', 'area-step' are also available to stack
                 },
                 groups: [
-                    [['owner', 'others']]
+                    [
+                        ['owner', 'others']
+                    ]
                 ]
             },
             axis: {
@@ -125,6 +133,64 @@
                 }
             }
         });
+
+        (function () {
+
+            // D3 Bubble Chart 
+
+            var diameter = 600;
+
+            var svg = d3.select('#chart3').append('svg')
+                .attr('width', diameter)
+                .attr('height', diameter);
+
+            var bubble = d3.layout.pack()
+                .size([diameter, diameter])
+                .value(function (d) {
+                    return d.size;
+                })
+                .padding(3);
+
+            function processData(data) {
+                var obj = data;
+
+                var newDataSet = [];
+
+                for (var prop in obj) {
+                    newDataSet.push({
+                        name: prop,
+                        className: prop.toLowerCase(),
+                        size: obj[prop]
+                    });
+                }
+                return {
+                    children: newDataSet
+                };
+            }
+
+            $.getJSON('languages.json',function (json) {
+
+                // generate data with calculated layout values
+                var nodes = bubble.nodes(processData(json))
+                    .filter(function (d) {
+                        return !d.children;
+                    }); // filter out the outer bubble
+
+                var vis = svg.selectAll('circle')
+                    .data(nodes);
+
+                vis.enter().append('circle')
+                    .attr('transform', function (d) {
+                        return 'translate(' + d.x + ',' + d.y + ')';
+                    })
+                    .attr('r', function (d) {
+                        return d.r;
+                    })
+                    .attr('class', function (d) {
+                        return d.className;
+                    });
+            });
+        })();
     </script>
 </body>
 
