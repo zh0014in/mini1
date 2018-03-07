@@ -33,8 +33,8 @@ else:
     writeJsonToFile('json/workinghour.json', data)
 with open('workinghour.csv', 'w') as file:
     wr = csv.writer(file, lineterminator='\n')
-    wr.writerow(['sunday', 'monday', 'tuesday', 'wendsday',
-                 'thirsday', 'friday', 'saturday'])
+    wr.writerow(['sunday', 'monday', 'tuesday', 'wendnesday',
+                 'thursday', 'friday', 'saturday'])
     for x in range(8, 19):
         hour = []
         for y in [a for a in data if a[1] == x]:
