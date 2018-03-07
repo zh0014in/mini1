@@ -16,18 +16,16 @@
     <div id="chart1"></div>
     <h1>Total commits per working hour (from 8am to 6pm)</h1>
     <div id="chart2"></div>
-    <h1>Total bytes count of languages (Torvalds)</h1>
+    <h1>Total bytes count of languages</h1>
     <div id="chart3" style="width: 1000px;height:800px;"></div>
     <script>
         c3.generate({
             bindto: '#chart1',
             data: {
                 url: 'participation.csv',
-                // type: 'bar',
                 types: {
                     owner: 'area-spline',
                     others: 'area-spline'
-                    // 'line', 'spline', 'step', 'area', 'area-step' are also available to stack
                 },
                 groups: [
                     [
@@ -46,7 +44,7 @@
                     },
                     label: 'week'
                 },
-                y:{
+                y: {
                     label: 'Commit count'
                 }
             }
@@ -67,7 +65,7 @@
                     },
                     label: 'working hour'
                 },
-                y:{
+                y: {
                     label: 'Commits'
                 }
             }
@@ -85,8 +83,8 @@
                     return b.value - a.value
                 });;
 
-                $.getJSON('languagesC.json', function (jsonC) {
-                    legend.push("C");
+                $.getJSON('languagesTopAndOthers.json', function (jsonC) {
+                    legend.push(Object.keys(jsonC)[0]);
                     arrC = Object.keys(jsonC).map(function (k) {
                         return {
                             name: k,
@@ -105,63 +103,35 @@
                         },
                         series: [{
                             name: 'C and others',
-                                type: 'pie',
-                                selectedMode: 'single',
-                                radius: [0, '30%'],
-                                center: ['50%','56%'],
-                                label: {
-                                    normal: {
-                                        position: 'inner'
-                                    }
-                                },
-                                labelLine: {
-                                    normal: {
-                                        show: false
-                                    }
-                                },
-                                data: arrC
+                            type: 'pie',
+                            selectedMode: 'single',
+                            radius: [0, '30%'],
+                            center: ['50%', '56%'],
+                            label: {
+                                normal: {
+                                    position: 'inner'
+                                }
                             },
-                            {
-                                name: 'Other languages',
-                                type: 'pie',
-                                radius: ['40%', '55%'],
-                                roseType: true,
-                                clockwise: false,
-                                center: ['50%','56%'],
-                                label: {
-                                    small: {
-                                        formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
-                                        backgroundColor: '#eee',
-                                        borderColor: '#aaa',
-                                        borderWidth: 1,
-                                        borderRadius: 4,
-                                        rich: {
-                                            a: {
-                                                color: '#999',
-                                                lineHeight: 22,
-                                                align: 'center'
-                                            },
-                                            hr: {
-                                                borderColor: '#aaa',
-                                                width: '100%',
-                                                borderWidth: 0.5,
-                                                height: 0
-                                            },
-                                            b: {
-                                                fontSize: 16,
-                                                lineHeight: 33
-                                            },
-                                            per: {
-                                                color: '#eee',
-                                                backgroundColor: '#334455',
-                                                padding: [2, 4],
-                                                borderRadius: 2
-                                            }
-                                        }
-                                    }
-                                },
-                                data: arr
-                            }
+                            labelLine: {
+                                normal: {
+                                    show: false
+                                }
+                            },
+                            data: arrC
+                        },
+                        {
+                            name: 'Other languages',
+                            type: 'pie',
+                            radius: ['40%', '55%'],
+                            roseType: true,
+                            clockwise: false,
+                            center: ['50%', '56%'],
+                            label: {
+                                small: {
+                                }
+                            },
+                            data: arr
+                        }
                         ]
                     };
                     var myChart = echarts.init(document.getElementById('chart3'));
