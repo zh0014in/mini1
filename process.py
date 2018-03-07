@@ -65,6 +65,7 @@ def mergeToLanguagesBytes(input):
 def getLanguages(repos, index):
     if(index >= len(repos)):
         writeJsonToFile('languages.json', languagesBytesOthers)
+        writeJsonToFile('languagesC.json', languagesBytesCandOthers)
         with open('languages.csv','w') as file:
             wr = csv.writer(file,lineterminator='\n')
             wr.writerow(['language', 'bytes'])
