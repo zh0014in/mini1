@@ -81,7 +81,7 @@
                     }
                 }).sort(function (a, b) {
                     return b.value - a.value
-                });;
+                });
 
                 $.getJSON('languagesTopAndOthers.json', function (jsonC) {
                     legend.push(Object.keys(jsonC)[0]);
@@ -109,7 +109,8 @@
                             center: ['50%', '56%'],
                             label: {
                                 normal: {
-                                    position: 'inner'
+                                    position: 'inner',
+                                    formatter: '{b}: {c}'
                                 }
                             },
                             labelLine: {
@@ -127,7 +128,8 @@
                             clockwise: false,
                             center: ['50%', '56%'],
                             label: {
-                                small: {
+                                normal: {
+                                    formatter: '{b}: {c}',
                                 }
                             },
                             data: arr
